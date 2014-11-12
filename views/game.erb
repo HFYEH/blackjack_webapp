@@ -1,1 +1,69 @@
-<h1>Blackjack Game</h1>
+<div class="well">
+  <h3>Dealer's Cards:</h3>
+  <% if @dealer_turn || @game_over %>
+    <% session[:dealer_hand].each do |card| %>
+      <%= img_tag(card) %>
+    <% end %>
+
+  <% else %>
+    <%= img_tag("cover") %>
+    <%= img_tag(session[:dealer_hand][1]) %>
+  <% end %>
+
+  <% if @game_over %>
+    </br>
+    <h4><%= "=> #{total_value(session[:dealer_hand])}" %></h4>
+  <% end %>
+</div>
+
+<div class="well">
+  <h3>Player's Cards:</h3>
+  <% session[:player_hand].each do |card| %>
+    <%= img_tag(card) %>
+  <% end %>
+
+  <% if @dealer_turn || @game_over %>
+    </br>
+    <h4><%= "=> #{total_value(session[:player_hand])}" %></h4>
+  <% end %>
+</div>
+
+<% if @show_hit_and_stay %>
+  <h4>
+    <%= 
+      "#{session[:player_name]} has #{total_value(session[:player_hand])}. " +
+      "What would #{session[:player_name]} like to do?" 
+    %>
+  </h4>
+
+  <form id="hit_form" action="/game/player/hit" method="post">
+    <input class="btn btn-large btn-success" type="submit" value="Hit" />
+  </form>
+
+  <form id="stay_form" action="/game/player/stay" method="post">
+    <input class="btn btn-large btn-warning" type="submit" value="Stay" />
+  </form>
+<% end %>
+
+<% if @failure %>
+  <div class="alert alert-error"><%= @failure %></div>
+<% end %>
+<% if @success %>
+  <div class="alert alert-success"><%= @success %></div>
+<% end %>   
+<% if @info %>
+  <div class="alert alert-info"><%= @info %></div>
+<% end %>
+
+<% if @dealer_turn %>
+  <form action="/game/dealer/hit" method="post">
+    <input class="btn btn-primary" type="submit" value="Click to see dealer's next card ->" />
+  </form>
+<% end %>
+
+<% if @game_over %>
+  <b><span>Play again?</span></b>
+  <a href="/bet"><input class="btn btn-primary" type="submit" value="Yes" /></a>
+  <a href="/exit"><input class="btn" type="submit" value="No" /></a>
+  </br>
+<% end %>

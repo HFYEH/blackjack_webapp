@@ -1,10 +1,15 @@
-<h3>Make a bet for this round.</h3>
-<p>
-  <%= "#{session[:player_name]} has $#{session[:money]}." %>
-</p>
-<form action="remember_" method="post">
-  <input type="text" name="bet"/>
-  </br>
-  <input type="submit" value="submit"/>
-  </br>
-</form>
+<% if session[:money].to_i > 0 %>
+  <h3>Make a bet for this round.</h3>
+  <p>
+    <%= "#{session[:player_name]} has $#{session[:money]}." %>
+  </p>
+  <form action="" method="post">
+    <input class="input-mini" type="text" name="bet" />
+    <input class="btn btn-small btn-primary" type="submit" value="Go!" />
+  </form>
+
+<% else %>
+  <h3>Sorry, you're broke.</h3>
+  <p>The only thing left to do is mortgage the house and try again!</p>
+  <a href="/new_game">Start Over</a>
+<% end %>
